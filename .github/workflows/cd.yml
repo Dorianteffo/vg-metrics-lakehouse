@@ -37,11 +37,11 @@ jobs:
                 docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
                 export FUNCTION_NAME="vg-sales-datagen"
                 aws lambda get-function --function-name $FUNCTION_NAME >/dev/null 2>&1 && \
-                echo "UPDATING THE LAMBDA FUNCTION....." \
+                echo "UPDATING THE LAMBDA FUNCTION....."; \
                 aws lambda update-function-code \
                 --function-name $FUNCTION_NAME \
                 --image-uri $REGISTRY/$REPOSITORY:$IMAGE_TAG || \
-                echo "CREATING THE LAMBDA FUNCTION......" \
+                echo "CREATING THE LAMBDA FUNCTION......"; \
                 aws lambda create-function \
                 --function-name $FUNCTION_NAME \
                 --code ImageUri=$REGISTRY/$REPOSITORY:$IMAGE_TAG \

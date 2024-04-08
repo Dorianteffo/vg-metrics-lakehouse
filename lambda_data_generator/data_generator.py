@@ -54,6 +54,7 @@ def generate_data(fake : Faker
 
     return data
 
+
 def lambda_handler(event, context):
     fake = Faker()
     df = generate_data(fake)
