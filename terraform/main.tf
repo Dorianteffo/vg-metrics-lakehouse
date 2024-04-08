@@ -55,3 +55,5 @@ resource "aws_iam_role" "lambda_iam_role" {
   })
 
   managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess", "arn:aws:iam::aws:policy/AmazonS3FullAccess","arn:aws:iam::aws:policy/CloudWatchEventsFullAccess","arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]
+
+}
