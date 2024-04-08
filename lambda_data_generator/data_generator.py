@@ -7,7 +7,7 @@ import io
 
 
 def generate_data(fake : Faker
-                  ) -> pd.DataFrame : 
+                  ) -> list : 
     
     publishers = [
         'Electronic Arts', 'Activision', 'Ubisoft', 'Nintendo', 'Sony Interactive Entertainment', 
@@ -57,7 +57,7 @@ def generate_data(fake : Faker
 
 def lambda_handler(event, context):
     fake = Faker()
-    df = generate_data(fake)
+    df = pd.DataFrame(generate_data(fake))
 
     csv_buffer = io.StringIO()
     df.to_csv(csv_buffer, index=False)

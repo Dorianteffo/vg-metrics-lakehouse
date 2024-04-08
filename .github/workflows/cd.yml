@@ -37,8 +37,6 @@ jobs:
                 cd lambda_data_generator
                 docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
                 docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-                aws lambda get-function --function-name $FUNCTION_NAME >/dev/null 2>&1 && \
-                echo "UPDATING THE LAMBDA FUNCTION....."; \
                 aws lambda get-function --function-name $FUNCTION_NAME >/dev/null 2>&1
                 if [ $? -eq 0 ]; then
                     echo "UPDATING THE LAMBDA FUNCTION....."; \
