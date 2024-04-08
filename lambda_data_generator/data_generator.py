@@ -6,6 +6,7 @@ import random
 import io
 
 
+
 def generate_data(fake : Faker
                   ) -> pd.DataFrame : 
     

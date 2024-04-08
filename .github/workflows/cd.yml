@@ -46,6 +46,6 @@ jobs:
                 aws lambda create-function \
                 --function-name $FUNCTION_NAME \
                 --code ImageUri=$REGISTRY/$REPOSITORY:$IMAGE_TAG \
-                --role arn:aws:iam::${ACCOUNT_ID}:role/s3-cloudwatch-ecr-lambdarole
+                --role arn:aws:iam::${ACCOUNT_ID}:role/s3-cloudwatch-ecr-lambdarole \
                 --runtime python3.12
                 
