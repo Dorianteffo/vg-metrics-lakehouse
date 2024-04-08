@@ -15,9 +15,8 @@ def generate_data(fake : Faker
         'Sega', 'Bethesda Softworks', 'Bandai Namco Entertainment', 'Konami', '2K Games'
     ]
 
-    # Generate dataset
+    # Generate data
     data = []
-
     for _ in range(10000):
         data.append({
             'Name': fake.name(),
