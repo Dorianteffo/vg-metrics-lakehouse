@@ -206,7 +206,7 @@ resource "aws_instance" "airflow_ec2" {
   vpc_security_group_ids = [aws_security_group.airflow_security_group.id]
 
   tags = {
-    Name = "airflow_dbt_snowflake_ec2"
+    Name = "airflow_glue"
   }
 
   user_data = <<EOF

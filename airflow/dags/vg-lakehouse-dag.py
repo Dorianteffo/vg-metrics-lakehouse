@@ -24,6 +24,7 @@ glue_args = {
 glue_script_directory = "/opt/airflow/dags/glue-spark"
 
 
+
 @dag(
     start_date=datetime(2024, 4, 8),  
     catchup=False,
