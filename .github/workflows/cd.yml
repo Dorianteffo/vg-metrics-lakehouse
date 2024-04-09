@@ -36,7 +36,7 @@ jobs:
                 docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
                 docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
-                
+
           - name : Create, Update Lambda function
             env: 
               REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -45,7 +45,7 @@ jobs:
               FUNCTION_NAME: vg-datagen
               ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
             run: |
-              aws lambda get-function --function-name $FUNCTION_NAME >/dev/null 2>&1
+              aws lambda get-function --function-name $FUNCTION_NAME
               if [ $? -eq 0 ]; then
                   echo "UPDATING THE LAMBDA FUNCTION....."; \
                   aws lambda update-function-code \
