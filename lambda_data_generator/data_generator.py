@@ -65,7 +65,6 @@ def generate_player_activity(n : int,
 
     return player_activity
 
-
 def upload_to_s3(bucket_name: str, 
                  key: str, 
                  data: list):
