@@ -39,6 +39,8 @@ jobs:
                 docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
                 echo "test..."
                 aws lambda get-function --function-name $FUNCTION_NAME >/dev/null 2>&1
+                GET_FUNCTION_EXIT_CODE=$?
+                echo "Exit code of get-function: $GET_FUNCTION_EXIT_CODE";
                 if [ $? -eq 0 ]; then
                     echo "UPDATING THE LAMBDA FUNCTION....."; \
                     aws lambda update-function-code \
