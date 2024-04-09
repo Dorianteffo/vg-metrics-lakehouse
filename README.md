@@ -33,4 +33,3 @@ Player_Activity
 * TeamEventsParticipated (int): Number of team events or multiplayer activities participated in.
 * SkillLevelUp (int): Number of times any skill was leveled up during the session.
 * PlayMode (string): Type of play mode engaged in (e.g., Solo, Co-op, PvP).
-* SessionDuration (float): Total duration of the session in minutes.

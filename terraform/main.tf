@@ -126,5 +126,115 @@ resource "aws_iam_role" "glue_iam_role" {
     ]
   })
 
-  managed_policy_arns = ["arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"]
+  managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonS3FullAccess","arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"]
+}
+
+
+# S3 bucket for glue script
+resource "aws_s3_bucket" "vg-lakehouse-glue-bucket" {
+  bucket = var.glue_script_bucket
+}
+
+
+
+resource "aws_security_group" "airflow_security_group" {
+  name        = "airflow_security_group"
+  description = "Security group to allow ssh and airflow"
+
+  ingress {
+    description = "Inbound SCP"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+
+  ingress {
+    description = "Inbound SCP"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+}
+
+
+data "aws_ami" "ubuntu" {
+    most_recent = true
+
+    filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+    }
+
+    filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+    }
+
+    owners = ["099720109477"] # Canonical
+}
+
+
+resource "tls_private_key" "custom_key" {
+    algorithm = "RSA"
+    rsa_bits  = 4096
+}
+
+
+resource "aws_key_pair" "generated_key" {
+    key_name   = var.key_name
+    public_key = tls_private_key.custom_key.public_key_openssh
+}
+
+
+
+resource "aws_instance" "airflow_ec2" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = var.airflow_instance_type
+
+  key_name        = aws_key_pair.generated_key.key_name
+  vpc_security_group_ids = [aws_security_group.airflow_security_group.id]
+
+  tags = {
+    Name = "airflow_dbt_snowflake_ec2"
+  }
+
+  user_data = <<EOF
+#!/bin/bash
+
+echo "-------------------------START SETUP---------------------------"
+sudo apt-get -y update
+
+sudo apt-get -y install \
+ca-certificates \
+curl \
+gnupg \
+lsb-release
+
+sudo apt -y install unzip
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+echo \
+"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+$(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get -y update
+sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+sudo chmod 666 /var/run/docker.sock
+
+echo "-------------------------END SETUP---------------------------"
+
+EOF
+
 }

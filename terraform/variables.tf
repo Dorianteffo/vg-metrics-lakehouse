@@ -61,3 +61,22 @@ variable "s3_location_gold_glue_database" {
   type        = string
   default     = "s3://vg-lakehouse/lakehouse/gold/"
 }
+
+variable "glue_script_bucket" {
+  type        = string
+  default     = "vg-lakehouse-glue"
+
+}
+
+variable "key_name" {
+  type        = string
+  default     = "app-key"
+  description = "EC2 key name"
+}
+
+
+variable "airflow_instance_type" {
+  type        = string
+  default     = "t2.xlarge"
+  description = "Airflow instance typ ec2"
+}
