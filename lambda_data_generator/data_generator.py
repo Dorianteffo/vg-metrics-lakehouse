@@ -87,8 +87,8 @@ def lambda_handler(event, context):
     players = generate_player_activity(num_players, [game['GameID'] for game in games], fake)
 
     bucket_name = "vg-sales-raw-data"
-    games_key = f"Games/{datetime.now().strftime('%Y-%m-%d')}/games_info_{datetime.datetime.now().strftime('%Y-%m-%d_%H')}.json"
-    players_key = f"Players/{datetime.now().strftime('%Y-%m-%d')}/players_activity_{datetime.datetime.now().strftime('%Y-%m-%d_%H')}.json"
+    games_key = f"Games/{datetime.now().strftime('%Y-%m-%d')}/games_info_{datetime.now().strftime('%Y-%m-%d_%H')}.json"
+    players_key = f"Players/{datetime.now().strftime('%Y-%m-%d')}/players_activity_{datetime.now().strftime('%Y-%m-%d_%H')}.json"
 
     upload_to_s3(bucket_name, games_key, games)
     upload_to_s3(bucket_name, players_key, players)
