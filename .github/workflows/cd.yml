@@ -31,25 +31,30 @@ jobs:
               REGISTRY: ${{ steps.login-ecr.outputs.registry }}
               REPOSITORY: ecr-repo-lambda-vg
               IMAGE_TAG: ${{ github.sha }}
-              FUNCTION_NAME: vg-datagen
-              ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
             run: |
                 cd lambda_data_generator
                 docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
                 docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-                echo "test..."
-                aws lambda get-function --function-name $FUNCTION_NAME >/dev/null 2>&1
-                GET_FUNCTION_EXIT_CODE=$?
-                echo "Exit code of get-function: $GET_FUNCTION_EXIT_CODE";
-                if [ $? -eq 0 ]; then
-                    echo "UPDATING THE LAMBDA FUNCTION....."; \
-                    aws lambda update-function-code \
-                        --function-name $FUNCTION_NAME \
-                        --image-uri $REGISTRY/$REPOSITORY:$IMAGE_TAG
-                else
-                    echo "CREATING THE LAMBDA FUNCTION......"; \
-                    aws lambda create-function \
-                        --function-name $FUNCTION_NAME \
-                        --code ImageUri=$REGISTRY/$REPOSITORY:$IMAGE_TAG \
-                        --role arn:aws:iam::${ACCOUNT_ID}:role/s3-cloudwatch-ecr-lambdarole 
-                fi
+
+                
+          - name : Create, Update Lambda function
+            env: 
+              REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+              REPOSITORY: ecr-repo-lambda-vg
+              IMAGE_TAG: ${{ github.sha }}
+              FUNCTION_NAME: vg-datagen
+              ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+            run: |
+              aws lambda get-function --function-name $FUNCTION_NAME >/dev/null 2>&1
+              if [ $? -eq 0 ]; then
+                  echo "UPDATING THE LAMBDA FUNCTION....."; \
+                  aws lambda update-function-code \
+                      --function-name $FUNCTION_NAME \
+                      --image-uri $REGISTRY/$REPOSITORY:$IMAGE_TAG
+              else
+                  echo "CREATING THE LAMBDA FUNCTION......"; \
+                  aws lambda create-function \
+                      --function-name $FUNCTION_NAME \
+                      --code ImageUri=$REGISTRY/$REPOSITORY:$IMAGE_TAG \
+                      --role arn:aws:iam::${ACCOUNT_ID}:role/s3-cloudwatch-ecr-lambdarole 
+              fi
