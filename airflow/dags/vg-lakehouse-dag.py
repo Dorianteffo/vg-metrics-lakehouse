@@ -21,8 +21,8 @@ glue_args = {
         }
 
 job_run_args = {
-        "--extra-py-files": [delta_core_jar_path, delta_storage_jar_path],
-        "--extra-jars": [delta_core_jar_path,delta_storage_jar_path]
+        "--extra-py-files": f'{delta_core_jar_path},{delta_storage_jar_path}',
+        "--extra-jars": f'{delta_core_jar_path},{delta_storage_jar_path}'
 }
 
 glue_script_directory = "/opt/airflow/dags/glue-spark"
