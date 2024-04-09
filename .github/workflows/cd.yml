@@ -47,12 +47,12 @@ jobs:
             run: |
               # Check if the Lambda function exists
               if aws lambda get-function --function-name $FUNCTION_NAME >/dev/null 2>&1; then
-                  echo "UPDATING THE LAMBDA FUNCTION..."
+                  echo "UPDATING THE LAMBDA FUNCTION...";
                   aws lambda update-function-code \
                       --function-name $FUNCTION_NAME \
                       --image-uri $REGISTRY/$REPOSITORY:$IMAGE_TAG
               else
-                  echo "CREATING THE LAMBDA FUNCTION..."
+                  echo "CREATING THE LAMBDA FUNCTION...";
                   aws lambda create-function \
                       --function-name $FUNCTION_NAME \
                       --package-type Image
