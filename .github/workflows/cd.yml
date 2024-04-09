@@ -29,9 +29,9 @@ jobs:
           - name: Build, tag, and push docker image to Amazon ECR
             env:
               REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-              REPOSITORY: ecr-repo-lambda-vg-sales
+              REPOSITORY: ecr-repo-lambda-vg
               IMAGE_TAG: ${{ github.sha }}
-              FUNCTION_NAME: vg-sales-datagen
+              FUNCTION_NAME: vg-datagen
               ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
             run: |
                 cd lambda_data_generator
@@ -42,11 +42,17 @@ jobs:
                     echo "UPDATING THE LAMBDA FUNCTION....."; \
                     aws lambda update-function-code \
                         --function-name $FUNCTION_NAME \
-                        --image-uri $REGISTRY/$REPOSITORY:$IMAGE_TAG
+                        --image-uri $REGISTRY/$REPOSITORY:$IMAGE_TAG; 
                 else
                     echo "CREATING THE LAMBDA FUNCTION......"; \
                     aws lambda create-function \
                         --function-name $FUNCTION_NAME \
                         --code ImageUri=$REGISTRY/$REPOSITORY:$IMAGE_TAG \
-                        --role arn:aws:iam::${ACCOUNT_ID}:role/s3-cloudwatch-ecr-lambdarole
+                        --role arn:aws:iam::${ACCOUNT_ID}:role/s3-cloudwatch-ecr-lambdarole; \
+                    aws lambda add-permission \
+                      --function-name $FUNCTION_NAME  \
+                      --statement-id {{UNIQUE-ID}} \
+                      --action "lambda:InvokeFunction" \
+                      --principal events.amazonaws.com \
+                      --source-arn aarn:aws:events:eu-west-3:${ACCOUNT_ID}:rule/rule-vg
                 fi
