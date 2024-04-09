@@ -41,7 +41,7 @@ def lakehouse_dag():
                 )
     def task_group_upload_toS3():
         upload_bronze_job_s3 = LocalFilesystemToS3Operator(
-            task_id="script",
+            task_id="upload_bronze_job_to_s3",
             filename=f"{glue_script_directory}/{bronze_glue_job_key}",
             dest_key=bronze_glue_job_key,
             dest_bucket=glue_bucket,
@@ -49,7 +49,7 @@ def lakehouse_dag():
         )
 
         upload_silver_job_s3 = LocalFilesystemToS3Operator(
-            task_id="script",
+            task_id="upload_silver_job_to_s3",
             filename=f"{glue_script_directory}/{silver_glue_job_key}",
             dest_key=silver_glue_job_key,
             dest_bucket=glue_bucket,
@@ -57,7 +57,7 @@ def lakehouse_dag():
         )
 
         upload_gold_job_s3 = LocalFilesystemToS3Operator(
-            task_id="script",
+            task_id="upload_gold_job_to_s3",
             filename=f"{glue_script_directory}/{gold_glue_job_key}",
             dest_key=gold_glue_job_key,
             dest_bucket=glue_bucket,
