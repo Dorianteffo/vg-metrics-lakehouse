@@ -35,7 +35,7 @@ resource "aws_ecr_repository" "ecr-repo" {
 
 resource "aws_cloudwatch_event_rule" "event-rule" {
   name        = var.eventbridge_rule
-  schedule_expression = "rate(6 hours)"
+  schedule_expression = "rate(2 hours)"
 
 }
 
