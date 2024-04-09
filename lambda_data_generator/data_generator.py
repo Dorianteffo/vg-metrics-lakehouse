@@ -79,7 +79,7 @@ def upload_to_s3(bucket_name: str,
 
 def lambda_handler(event, context):
     num_games = 10
-    num_players = 50000
+    num_players = 20000
 
     fake = Faker()
 
