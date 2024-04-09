@@ -18,6 +18,7 @@ glue_args = {
             "GlueVersion": "4.0", 
             "NumberOfWorkers": 2, 
             "WorkerType": "G.1X",
+            "Language" : "Python3"
         }
 
 job_run_args = {
