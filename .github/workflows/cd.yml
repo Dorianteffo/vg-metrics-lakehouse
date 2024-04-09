@@ -51,8 +51,8 @@ jobs:
                         --role arn:aws:iam::${ACCOUNT_ID}:role/s3-cloudwatch-ecr-lambdarole; \
                     aws lambda add-permission \
                       --function-name $FUNCTION_NAME  \
-                      --statement-id 123xxxxx \
-                      --action "lambda:InvokeFunction" \
+                      --statement-id $(date +%s) \
+                      --action lambda:InvokeFunction \
                       --principal events.amazonaws.com \
                       --source-arn arn:aws:events:eu-west-3:${ACCOUNT_ID}:rule/rule-vg
                 fi
