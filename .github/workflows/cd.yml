@@ -57,7 +57,7 @@ jobs:
                       --function-name $FUNCTION_NAME \
                       --package-type Image \
                       --code ImageUri=$REGISTRY/$REPOSITORY:$IMAGE_TAG \
-                      --role arn:aws:iam::${ACCOUNT_ID}:role/s3-cloudwatch-ecr-lambdarole
+                      --role arn:aws:iam::${ACCOUNT_ID}:role/s3-cloudwatch-ecr-lambdarole \
                       --timeout 300
 
                   # Add permission to invoke the Lambda function
