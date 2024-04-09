@@ -42,7 +42,7 @@ jobs:
                     echo "UPDATING THE LAMBDA FUNCTION....."; \
                     aws lambda update-function-code \
                         --function-name $FUNCTION_NAME \
-                        --image-uri $REGISTRY/$REPOSITORY:$IMAGE_TAG; 
+                        --image-uri $REGISTRY/$REPOSITORY:$IMAGE_TAG
                 else
                     echo "CREATING THE LAMBDA FUNCTION......"; \
                     aws lambda create-function \
