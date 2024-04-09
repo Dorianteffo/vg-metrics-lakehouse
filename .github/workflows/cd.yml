@@ -45,16 +45,24 @@ jobs:
               FUNCTION_NAME: vg-datagen
               ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
             run: |
-              aws lambda get-function --function-name $FUNCTION_NAME
-              if [ $? -eq 0 ]; then
-                  echo "UPDATING THE LAMBDA FUNCTION....."; \
+              # Check if the Lambda function exists
+              if aws lambda get-function --function-name $FUNCTION_NAME >/dev/null 2>&1; then
+                  echo "UPDATING THE LAMBDA FUNCTION..."
                   aws lambda update-function-code \
                       --function-name $FUNCTION_NAME \
                       --image-uri $REGISTRY/$REPOSITORY:$IMAGE_TAG
               else
-                  echo "CREATING THE LAMBDA FUNCTION......"; \
+                  echo "CREATING THE LAMBDA FUNCTION..."
                   aws lambda create-function \
                       --function-name $FUNCTION_NAME \
                       --code ImageUri=$REGISTRY/$REPOSITORY:$IMAGE_TAG \
-                      --role arn:aws:iam::${ACCOUNT_ID}:role/s3-cloudwatch-ecr-lambdarole 
+                      --role arn:aws:iam::${ACCOUNT_ID}:role/s3-cloudwatch-ecr-lambdarole
+
+                  # Add permission to invoke the Lambda function
+                  aws lambda add-permission \
+                      --function-name $FUNCTION_NAME \
+                      --statement-id $(date +%s) \
+                      --action "lambda:InvokeFunction" \
+                      --principal events.amazonaws.com \
+                      --source-arn arn:aws:events:eu-west-3:${ACCOUNT_ID}:rule/rule-vg
               fi
