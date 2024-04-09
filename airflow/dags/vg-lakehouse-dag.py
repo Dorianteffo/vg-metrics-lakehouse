@@ -21,8 +21,8 @@ glue_args = {
         }
 
 job_run_args = {
-        "extra-py-files": [delta_core_jar_path, delta_storage_jar_path],
-        "extra-jars": [delta_core_jar_path,delta_storage_jar_path]
+        "--extra-py-files": [delta_core_jar_path, delta_storage_jar_path],
+        "--extra-jars": [delta_core_jar_path,delta_storage_jar_path]
 }
 
 glue_script_directory = "/opt/airflow/dags/glue-spark"
@@ -77,7 +77,7 @@ def lakehouse_dag():
                               "iam_role_name": glue_iam_role ,
                               "create_job_kwargs" : glue_args,
                               "s3_bucket" : glue_bucket,
-                              "run_job_kwargs" : job_run_args}
+                              "script_args" : job_run_args}
                 )
     def task_group_run_job():
         submit_glue_bronze_job = GlueJobOperator(
