@@ -9,7 +9,7 @@ on:
     
 
 jobs: 
-    push_docker_image: 
+    push_ecr_update_lambda: 
         runs-on: ubuntu-latest
         steps:
           - name: checkout repo 
