@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from airflow.decorators import dag, task_group
-from airflow.providers.amazon.aws.operators.bash import BashOperator
+from airflow.providers.operators.bash import BashOperator
 from airflow.providers.amazon.aws.transfers.local_to_s3 import LocalFilesystemToS3Operator
 
 glue_bucket = "vg-lakehouse-glue"
