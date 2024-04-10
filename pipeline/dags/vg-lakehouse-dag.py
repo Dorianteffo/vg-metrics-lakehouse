@@ -41,6 +41,9 @@ glue_script_directory = "/opt/airflow/dags/glue-spark"
 def lakehouse_dag():
     @task_group(group_id='glue_scripts_to_S3', default_args={"aws_conn_id": "aws_conn"})
     def task_group_upload_toS3():
+        """
+        Upload all the glue scripts to S3
+        """
         upload_bronze_job_s3 = LocalFilesystemToS3Operator(
             task_id="upload_bronze_job_to_s3",
             filename=f"{glue_script_directory}/{bronze_glue_job_key}",
@@ -77,6 +80,10 @@ def lakehouse_dag():
         },
     )
     def task_group_run_job():
+        """
+        Run the glue scripts
+        
+        """
         submit_glue_bronze_job = GlueJobOperator(
             task_id="bronze-layer-job",
             job_name=bronze_glue_job,

@@ -52,7 +52,7 @@ def read_delta_table(table: str, database: str) -> DataFrame:
 
 def session_metrics(activites_df: DataFrame) -> DataFrame:
     """
-    Calculate session metrics : avg session duration, avg currency earned,...
+    Calculate game session metrics : avg session duration, avg currency earned,...
 
     :param activities_df : activities spark dataframe
 
