@@ -81,7 +81,7 @@ def lakehouse_dag():
     @task_group(group_id='run_glue_jobs',
                 default_args={"aws_conn_id": "aws_conn", 
                               "iam_role_name": glue_iam_role ,
-                              "create_job_kwargs" : glue_args,
+                              "script_args" : glue_args,
                               "s3_bucket" : glue_bucket,
                             #   "script_args" : job_run_args
                             }
