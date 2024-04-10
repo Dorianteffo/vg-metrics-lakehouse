@@ -15,8 +15,15 @@ glue_iam_role = "vg-glue-role"
 delta_path = "s3://vg-lakehouse/delta_jar/delta-core_2.12-2.1.0.jar,s3://vg-lakehouse/delta_jar/delta-storage-2.1.0.jar"
 glue_args = {
             "GlueVersion": "4.0", 
+            "Command" : {
+                'PythonVersion': '3'
+            },
             "WorkerType": "G.1X",
             "NumberOfWorkers": 2, 
+            "DefaultArguments":{
+                '--extra-jars':delta_path,
+                '--extra-py-files' : delta_path, 
+                },
         }
 
 # job_run_args = {
