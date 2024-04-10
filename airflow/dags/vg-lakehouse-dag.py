@@ -15,22 +15,15 @@ glue_iam_role = "vg-glue-role"
 delta_path = "s3://vg-lakehouse/delta_jar/delta-core_2.12-2.1.0.jar,s3://vg-lakehouse/delta_jar/delta-storage-2.1.0.jar"
 glue_args = {
             "GlueVersion": "4.0", 
-            # "Command" : {
-            #     'Name': 'glueetl',
-            #     'PythonVersion': '3'
-            # },
             "WorkerType": "G.1X",
             "NumberOfWorkers": 2, 
             "DefaultArguments":{
                 '--extra-jars':delta_path,
                 '--extra-py-files': delta_path, 
+                '--enable-glue-datacatalog':'true'
             },
         }
 
-# job_run_args = {
-#         "--extra-py-files": delta_path,
-#         "--extra-jars": delta_path
-# }
 
 glue_script_directory = "/opt/airflow/dags/glue-spark"
 
@@ -84,7 +77,6 @@ def lakehouse_dag():
                               "iam_role_name": glue_iam_role ,
                               "create_job_kwargs" : glue_args,
                               "s3_bucket" : glue_bucket,
-                            #   "script_args" : job_run_args
                             }
                 )
     def task_group_run_job():
