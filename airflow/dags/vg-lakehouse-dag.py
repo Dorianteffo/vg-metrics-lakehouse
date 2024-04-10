@@ -15,15 +15,8 @@ glue_iam_role = "vg-glue-role"
 delta_path = "s3://vg-lakehouse/delta_jar/delta-core_2.12-2.1.0.jar,s3://vg-lakehouse/delta_jar/delta-storage-2.1.0.jar"
 glue_args = {
             "GlueVersion": "4.0", 
-            "Command" : {
-                'PythonVersion': '3'
-            },
             "WorkerType": "G.1X",
             "NumberOfWorkers": 2, 
-            "DefaultArguments":{
-                '--extra-jars':delta_path,
-                '--extra-py-files' : delta_path, 
-                },
         }
 
 # job_run_args = {
@@ -81,7 +74,7 @@ def lakehouse_dag():
     @task_group(group_id='run_glue_jobs',
                 default_args={"aws_conn_id": "aws_conn", 
                               "iam_role_name": glue_iam_role ,
-                              "script_args" : glue_args,
+                              "create_job_kwargs" : glue_args,
                               "s3_bucket" : glue_bucket,
                             #   "script_args" : job_run_args
                             }
