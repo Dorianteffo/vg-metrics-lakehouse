@@ -100,7 +100,6 @@ def lakehouse_dag():
 
         submit_glue_bronze_job >> submit_glue_silver_job >> submit_glue_gold_job
 
-
     task_group_upload_toS3() >> task_group_run_job()
 
 lakehouse_dag()
