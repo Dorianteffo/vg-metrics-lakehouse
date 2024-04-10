@@ -15,10 +15,10 @@ glue_iam_role = "vg-glue-role"
 delta_path = "s3://vg-lakehouse/delta_jar/delta-core_2.12-2.1.0.jar,s3://vg-lakehouse/delta_jar/delta-storage-2.1.0.jar"
 glue_args = {
             "GlueVersion": "4.0", 
-            "Command" : {
-                'Name': 'glueetl',
-                'PythonVersion': '3'
-            },
+            # "Command" : {
+            #     'Name': 'glueetl',
+            #     'PythonVersion': '3'
+            # },
             "WorkerType": "G.1X",
             "NumberOfWorkers": 2, 
             "DefaultArguments":{
