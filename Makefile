@@ -15,3 +15,15 @@ ec2-private-key:
 
 airflow-ec2-dns: 
 	terraform -chdir=./terraform output -raw airflow_ec2_public_dns
+
+format: 
+	poetry run python -m black -S --line-length 90 .
+
+type: 
+	poetry run mypy --ignore-missing-imports .
+
+ruff: 
+	poetry run ruff check . --fix 
+
+
+ci: format type ruff

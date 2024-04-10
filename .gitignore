@@ -1,1 +1,3 @@
-/glue-spark
+.myenv
+.mypy_cache
+.ruff_cache

@@ -14,35 +14,32 @@ gold_glue_job_key = "gold_glue_script.py"
 glue_iam_role = "vg-glue-role"
 delta_path = "s3://vg-lakehouse/delta_jar/delta-core_2.12-2.1.0.jar,s3://vg-lakehouse/delta_jar/delta-storage-2.1.0.jar"
 glue_args = {
-            "GlueVersion": "4.0", 
-            "WorkerType": "G.1X",
-            "NumberOfWorkers": 2, 
-            "DefaultArguments":{
-                '--extra-jars':delta_path,
-                '--extra-py-files': delta_path, 
-                '--enable-glue-datacatalog':'true'
-            },
-        }
+    "GlueVersion": "4.0",
+    "WorkerType": "G.1X",
+    "NumberOfWorkers": 2,
+    "DefaultArguments": {
+        '--extra-jars': delta_path,
+        '--extra-py-files': delta_path,
+        '--enable-glue-datacatalog': 'true',
+    },
+}
 
 
 glue_script_directory = "/opt/airflow/dags/glue-spark"
 
 
-
 @dag(
-    start_date=datetime(2024, 4, 8),  
+    start_date=datetime(2024, 4, 8),
     catchup=False,
-    schedule_interval="0 20 * * *",  
+    schedule_interval="0 20 * * *",
     tags=["lakehouse", "glue"],
-    default_args = {
-        "retries":2,
-        "retry_delay":timedelta(minutes=5),
-    }
+    default_args={
+        "retries": 2,
+        "retry_delay": timedelta(minutes=5),
+    },
 )
 def lakehouse_dag():
-    @task_group(group_id='glue_scripts_to_S3',
-                default_args={"aws_conn_id": "aws_conn"}
-                )
+    @task_group(group_id='glue_scripts_to_S3', default_args={"aws_conn_id": "aws_conn"})
     def task_group_upload_toS3():
         upload_bronze_job_s3 = LocalFilesystemToS3Operator(
             task_id="upload_bronze_job_to_s3",
@@ -70,36 +67,37 @@ def lakehouse_dag():
 
         upload_bronze_job_s3 >> upload_silver_job_s3 >> upload_gold_job_s3
 
-
-
-    @task_group(group_id='run_glue_jobs',
-                default_args={"aws_conn_id": "aws_conn", 
-                              "iam_role_name": glue_iam_role ,
-                              "create_job_kwargs" : glue_args,
-                              "s3_bucket" : glue_bucket,
-                            }
-                )
+    @task_group(
+        group_id='run_glue_jobs',
+        default_args={
+            "aws_conn_id": "aws_conn",
+            "iam_role_name": glue_iam_role,
+            "create_job_kwargs": glue_args,
+            "s3_bucket": glue_bucket,
+        },
+    )
     def task_group_run_job():
         submit_glue_bronze_job = GlueJobOperator(
             task_id="bronze-layer-job",
             job_name=bronze_glue_job,
-            script_location=f"s3://{glue_bucket}/{bronze_glue_job_key}"
+            script_location=f"s3://{glue_bucket}/{bronze_glue_job_key}",
         )
 
         submit_glue_silver_job = GlueJobOperator(
             task_id="silver-layer-job",
             job_name=silver_glue_job,
-            script_location=f"s3://{glue_bucket}/{silver_glue_job_key}"
+            script_location=f"s3://{glue_bucket}/{silver_glue_job_key}",
         )
 
         submit_glue_gold_job = GlueJobOperator(
             task_id="gold-layer-job",
             job_name=gold_glue_job,
-            script_location=f"s3://{glue_bucket}/{gold_glue_job_key}"
+            script_location=f"s3://{glue_bucket}/{gold_glue_job_key}",
         )
 
         submit_glue_bronze_job >> submit_glue_silver_job >> submit_glue_gold_job
 
     task_group_upload_toS3() >> task_group_run_job()
+
 
 lakehouse_dag()

@@ -22,7 +22,7 @@ jobs:
                 SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
                 REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
                 REMOTE_USER: ${{ secrets.REMOTE_USER }}
-                SOURCE: "/airflow/"
+                SOURCE: "/pipeline/"
                 TARGET: "/home/ubuntu/airflow"
                 # SCRIPT_AFTER: |
                 #     cd airflow 
