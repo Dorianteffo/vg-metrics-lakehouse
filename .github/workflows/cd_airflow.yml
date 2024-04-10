@@ -24,11 +24,11 @@ jobs:
                 REMOTE_USER: ${{ secrets.REMOTE_USER }}
                 SOURCE: "/airflow/"
                 TARGET: "/home/ubuntu/airflow"
-                # SCRIPT_AFTER: |
-                #     cd airflow 
-                #     echo -e "AIRFLOW_UID=$(id -u)\nAIRFLOW_GID=0" > .env
-                #     sudo docker build -t apache-airflow-amazon:aws-dorian .
-                #     sudo docker compose up airflow-init
-                #     sudo docker compose up -d  
+                SCRIPT_AFTER: |
+                    cd airflow 
+                    echo -e "AIRFLOW_UID=$(id -u)\nAIRFLOW_GID=0" > .env
+                    sudo docker build -t apache-airflow-amazon:aws-dorian .
+                    sudo docker compose up airflow-init
+                    sudo docker compose up -d  
 
 
