@@ -16,14 +16,15 @@ delta_path = "s3://vg-lakehouse/delta_jar/delta-core_2.12-2.1.0.jar,s3://vg-lake
 glue_args = {
             "GlueVersion": "4.0", 
             "Command" : {
+                'Name': 'glueetl',
                 'PythonVersion': '3'
             },
             "WorkerType": "G.1X",
             "NumberOfWorkers": 2, 
             "DefaultArguments":{
                 '--extra-jars':delta_path,
-                '--extra-py-files' : delta_path, 
-                },
+                '--extra-py-files': delta_path, 
+            },
         }
 
 # job_run_args = {
@@ -104,6 +105,7 @@ def lakehouse_dag():
             job_name=gold_glue_job,
             script_location=f"s3://{glue_bucket}/{gold_glue_job_key}"
         )
+
         submit_glue_bronze_job >> submit_glue_silver_job >> submit_glue_gold_job
 
 
