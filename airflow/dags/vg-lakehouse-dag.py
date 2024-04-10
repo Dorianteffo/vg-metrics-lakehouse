@@ -17,11 +17,12 @@ delta_storage_jar_path = "s3://vg-lakehouse/delta_jar/delta-storage-2.1.0.jar"
 glue_args = {
             "GlueVersion": "4.0", 
             "NumberOfWorkers": 2, 
+            "PythonVersion": "3",
             "WorkerType": "G.1X"
         }
 
 job_run_args = {
-        # "--extra-py-files": f'{delta_core_jar_path},{delta_storage_jar_path}',
+        "--extra-py-files": f'{delta_core_jar_path},{delta_storage_jar_path}',
         "--extra-jars": f'{delta_core_jar_path},{delta_storage_jar_path}'
 }
 
