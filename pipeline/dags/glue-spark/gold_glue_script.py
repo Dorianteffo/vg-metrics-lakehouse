@@ -65,7 +65,7 @@ def session_metrics(activites_df: DataFrame) -> DataFrame:
         F.round(F.mean(F.col("CurrencyEarned"))).alias("Avg_CurrencyEarned"),
         F.round(F.mean(F.col("CurrencySpent"))).alias("Avg_CurrencySpent"),
         F.round(F.mean(F.col("QuestsCompleted"))).alias("Avg_QuestsCompleted"),
-    ).orderBy(F.col('Avg_SessionDuration').desc())
+    ).orderBy(F.col('Avg_SessionDuration(minutes)').desc())
     return session_metrics_df
 
 
