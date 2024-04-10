@@ -141,7 +141,6 @@ def main():
     write_delta_tables("Games_genre_metrics", gold_database, game_genre_metrics_df)
     write_delta_tables("Player_level_metrics", gold_database, player_level_metrics_df)
 
-
 if __name__ == '__main__':
     main()
     job.commit()
