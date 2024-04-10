@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from airflow.providers.amazon.aws.operators.glue import GlueJobOperator
+from airflow.providers.amazon.aws.operators.glue import AwsGlueJobOperator
 from airflow.decorators import dag, task_group
 from airflow.providers.amazon.aws.transfers.local_to_s3 import LocalFilesystemToS3Operator
 
@@ -88,19 +88,19 @@ def lakehouse_dag():
                             }
                 )
     def task_group_run_job():
-        submit_glue_bronze_job = GlueJobOperator(
+        submit_glue_bronze_job = AwsGlueJobOperator(
             task_id="bronze-layer-job",
             job_name=bronze_glue_job,
             script_location=f"s3://{glue_bucket}/{bronze_glue_job_key}"
         )
 
-        submit_glue_silver_job = GlueJobOperator(
+        submit_glue_silver_job = AwsGlueJobOperator(
             task_id="silver-layer-job",
             job_name=silver_glue_job,
             script_location=f"s3://{glue_bucket}/{silver_glue_job_key}"
         )
 
-        submit_glue_gold_job = GlueJobOperator(
+        submit_glue_gold_job = AwsGlueJobOperator(
             task_id="gold-layer-job",
             job_name=gold_glue_job,
             script_location=f"s3://{glue_bucket}/{gold_glue_job_key}"
