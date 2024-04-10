@@ -59,13 +59,13 @@ def session_metrics(activites_df: DataFrame) -> DataFrame:
     :return spark dataframe
     """
     session_metrics_df = activites_df.select(
-        F.round(F.mean(F.col("SessionDuration"))).alias("Avg_SessionDuration(minutes)"),
+        F.round(F.mean(F.col("SessionDuration"))).alias("Avg_SessionDuration_minutes"),
         F.round(F.mean(F.col("ExperiencePoints"))).alias("Avg_ExperiencePoints"),
         F.round(F.mean(F.col("AchievementsUnlocked"))).alias("Avg_AchievementsUnlocked"),
         F.round(F.mean(F.col("CurrencyEarned"))).alias("Avg_CurrencyEarned"),
         F.round(F.mean(F.col("CurrencySpent"))).alias("Avg_CurrencySpent"),
         F.round(F.mean(F.col("QuestsCompleted"))).alias("Avg_QuestsCompleted"),
-    ).orderBy(F.col('Avg_SessionDuration(minutes)').desc())
+    ).orderBy(F.col('Avg_SessionDuration_minutes').desc())
     return session_metrics_df
 
 
@@ -84,10 +84,10 @@ def game_genre_metrics(activities_df: DataFrame, games_df: DataFrame) -> DataFra
         .groupBy('Genre')
         .agg(
             F.round(F.mean(F.col("SessionDuration"))).alias(
-                "Avg_SessionDuration(minutes)"
+                "Avg_SessionDuration_minutes"
             ),
             F.sum(F.col("QuestsCompleted")).alias("Total_QuestsCompleted"),
-            F.round(F.mean(F.col("Game_Length"))).alias("Avg_Game_Length(minutes)"),
+            F.round(F.mean(F.col("Game_Length"))).alias("Avg_Game_Length_minutes"),
         )
     )
     return game_genre_metrics_df
